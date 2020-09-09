@@ -1,6 +1,7 @@
 package com.github.kreker721425.db.controllers;
 
 import com.github.kreker721425.db.constants.ServicesConstants;
+import com.github.kreker721425.db.models.MeasureEnum;
 import com.github.kreker721425.db.models.Objective;
 import com.github.kreker721425.db.models.Request;
 import com.github.kreker721425.db.models.dto.InitialData;
@@ -101,6 +102,8 @@ public class TableController {
                       Model model
     ) throws IOException {
 
+        List<MeasureEnum> measure = new ArrayList<>();
+
         if (expertiseProjectRTO!=null) objective.setIlcService(objective.getIlcService()+ServicesConstants.EXPERTISE_PROJECT_RTO+"\n");
         if (expertiseCommissioningRTO!=null) objective.setIlcService(objective.getIlcService()+ServicesConstants.EXPERTISE_COMMISSIONING_RTO+"\n");
         if (expertiseIFF!=null) objective.setIlcService(objective.getIlcService()+ServicesConstants.EXPERTISE_IFF+"\n");
@@ -108,7 +111,7 @@ public class TableController {
 
         if (objective.getIlcService().isEmpty()) objective.setIlcService(objective.getIlcService()+"НЕТ");
 
-        if (measurementsNoise!=null) objective.setOiService(objective.getOiService()+ServicesConstants.MEASUREMENTS_NOISE+"\n");
+        if (measurementsNoise!=null) measure.add(MeasureEnum.Noise);
         if (measurementsVibration!=null) objective.setOiService(objective.getOiService()+ServicesConstants.MEASUREMENTS_VIBRATION+"\n");
         if (measurementsMicroclimate!=null) objective.setOiService(objective.getOiService()+ServicesConstants.MEASUREMENTS_MICROCLIMATE+"\n");
         if (measurementsIllumination!=null) objective.setOiService(objective.getOiService()+ServicesConstants.MEASUREMENTS_ILLUMINATION+"\n");
