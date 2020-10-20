@@ -2,7 +2,7 @@ package com.github.kreker721425.db.controllers;
 
 import com.github.kreker721425.db.models.Role;
 import com.github.kreker721425.db.models.User;
-import com.github.kreker721425.db.repositories.UserRepository;
+import com.github.kreker721425.db.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,27 +15,26 @@ import java.util.Set;
 @Controller
 public class LoginAndRegistrationController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public LoginAndRegistrationController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public LoginAndRegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("registration")
-    public String registration(Model model){
+    public String registration(Model model) {
         model.addAttribute("roles", Role.values());
         return "registration";
     }
 
 
-    //НЕ РАБОТАЕТ ПЕРЕДАЧА CHECKBOX
     @PostMapping("registration")
     public String addUser(User user,
                           @RequestParam(value = "ADMIN", required = false) String adminRole,
                           @RequestParam(value = "USER", required = false) String userRole,
                           Model model
     ){
-        User userInDB = userRepository.findByUsername(user.getUsername());
+        User userInDB = userService.findByUsername(user.getUsername());
 
         if (userInDB != null) {
             model.addAttribute("messageErr","Такой логин уже существует");
@@ -49,7 +48,7 @@ public class LoginAndRegistrationController {
         user.setRoles(set);
         user.setActive(true);
 
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/user";
     }
 
@@ -60,7 +59,7 @@ public class LoginAndRegistrationController {
 
     @PostMapping("login")
     public String signIn(User user, Model model){
-        User userInDB = userRepository.findByUsername(user.getUsername());
+        User userInDB = userService.findByUsername(user.getUsername());
         if (userInDB != null  && userInDB.getPassword().equals(user.getPassword())) {
             /*if (user.isActive()) {
                 model.addAttribute("messageErr", "Пользователь уже активен"); //не работает

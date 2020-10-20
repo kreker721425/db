@@ -65,26 +65,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--converter-->
-
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>3.15</version>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>org.apache.poi.xwpf.converter.core</artifactId>
-			<version>1.0.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
-			<version>1.0.6</version>
-		</dependency>
-
 		<!--test-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

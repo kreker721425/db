@@ -1,17 +1,25 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#import "macros/login.ftl" as l>
+<#import "macros/input_form.ftl" as input>
+<#import "macros/common.ftl" as c>
 
-<@c.page>
-Registration
-    <div>
-        ${messageErr!}
-    </div>
-    <@l.login "registration">
-        <div>
+<@c.title>
+    Регистрация
+</@c.title>
+
+<@c.style>
+</@c.style>
+
+<@c.body>
+
+    <@l.login path="registration" btn="Зарегистрировать" welc="Регистрация">
+        <div class="form-group">
+            <@input.input id="name" type="text" label="Имя" value=""/>
+        </div>
+        <div class="form-group">
             <#list roles as role>
-                <label><input type="checkbox" name="${role}">${role}</label>
+                <@input.checkbox_form id="${role}" label="${role}"/>
             </#list>
         </div>
-        <div><input type="submit" value="Добавить пользователя"/></div>
     </@l.login>
-</@c.page>
+
+</@c.body>

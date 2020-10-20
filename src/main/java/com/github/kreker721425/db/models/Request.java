@@ -17,8 +17,8 @@ public class Request {
     private Long id;
 
 //    @NotBlank(message = "Введите номер заявки")
-    @Column(name = "number")
-    private long number;                 //№ заявки
+@Column(name = "number")
+private String number;                 //№ заявки
 
 //    @NotBlank(message = "Выберите тип заказчика")
     private String typeCustomer;        //Вид заказчика
@@ -30,18 +30,20 @@ public class Request {
     //Владелец
 //    @NotBlank(message = "Выберите тип владельца")
     private String typeOwner;           //Вид
-//    @NotBlank(message = "Введите наименование владельца")
+    //    @NotBlank(message = "Введите наименование владельца")
     private String nameOwner;           //Наименование
-//    @NotBlank(message = "Введите адрес владельца")
+    //    @NotBlank(message = "Введите адрес владельца")
     private String addressOwner;        //Адрес
 
 
-//    @NotBlank(message = "Выберите файл заявки")
+    //    @NotBlank(message = "Выберите файл заявки")
     private String filename;
 
-    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL, fetch = FetchType.LAZY , orphanRemoval = true)
+
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Objective> objectives;
 
-    public Request(){}
+    public Request() {
+    }
 }
 

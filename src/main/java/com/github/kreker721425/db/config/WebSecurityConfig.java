@@ -19,14 +19,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private final DataSource dataSource;
 
-    /*@Autowired
-    private final PasswordEncoder passwordEncoder = getPasswordEncoder();
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder(){
-        return new BCryptPasswordEncoder(8);
-    }*/
-
     public WebSecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -35,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
+                .antMatchers().permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

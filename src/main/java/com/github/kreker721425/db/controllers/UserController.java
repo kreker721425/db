@@ -2,8 +2,7 @@ package com.github.kreker721425.db.controllers;
 
 import com.github.kreker721425.db.models.Role;
 import com.github.kreker721425.db.models.User;
-import com.github.kreker721425.db.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.kreker721425.db.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,20 +18,24 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
 
     @GetMapping
     public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "userList";
+        model.addAttribute("users", userService.findAll());
+        return "user_list";
     }
 
-    @GetMapping("userEdit/{user}")
+    @GetMapping("/user_edit/{user}")
     public String userEdit(@PathVariable User user, Model model) {
         model.addAttribute("user",user);
         model.addAttribute("roles", Role.values());
-        return "userEdit";
+        return "user_edit";
     }
 
     @PostMapping
@@ -54,14 +57,14 @@ public class UserController {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
-        userRepository.save(user);
+        userService.save(user);
 
         return "redirect:/user";
     }
 
     @GetMapping("delete/{user}")
     public String userDelete(@PathVariable User user) {
-        userRepository.delete(user);
+        userService.delete(user);
         return "redirect:/user";
     }
 }

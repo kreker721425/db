@@ -1,12 +1,14 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#import "macros/login.ftl" as l>
+<#import "macros/common.ftl" as c>
 
-<@c.page>
-Login
-    <div>
-        ${messageErr!}
-    </div>
-    <@l.login "login">
-    <div><input type="submit" value="Sign In"/></div>
+<@c.title>
+    Логин
+</@c.title>
+
+<@c.style>
+</@c.style>
+
+<@c.body>
+    <@l.login path="login" btn="Войти" welc="Вход">
     </@l.login>
-</@c.page>
+</@c.body>

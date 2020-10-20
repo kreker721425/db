@@ -3,7 +3,7 @@ package com.github.kreker721425.db.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,32 +14,28 @@ public class Objective {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    private String oiService;         //ОИ
-    private String ilcService;        //ИЛЦ
+    private String fileMeasure;
 
     //Место проведения работ
-    //@NotBlank(message = "Введите регион работ")
+    private String addressWork;
     private String districtWork;            //Район
-    //    @NotBlank(message = "Введите город работ")
     private String cityWork;                //Город
-    //    @NotBlank(message = "Введите улицу работ")
     private String streetWork;              //Улица
-    //    @NotBlank(message = "Введите дом работ")
     private String houseWork;               //Дом
 
 
-    //    @NotBlank(message = "Выберите ответственного")
     private String responsible;         //Ответственный
     private String executor;            //Исполнитель
-    private Date deadline;              //Срок выполнения
+    private String deadline;              //Срок выполнения
     private boolean status;             //Статус
-    private Date dateCompleted;         //Дата сдачи*/
+    private String dateCompleted;         //Дата сдачи*/
     //Объект надзора
-    //Кто платит (план/договор)
-    //Рабочие места - количество
-    //Рабочие места - не соответствуют
-    //Измерения - количество
-    //Измерения - не соответствуют
+
+    private String typeOfPayment;       //Кто платит (план/договор)
+    private int workPlaces;             //Рабочие места - количество
+    private int workPlacesNo;           //Рабочие места - не соответствуют
+    private int measurement;            //Измерения - количество
+    private int measurementNo;          //Измерения - не соответствуют
 
 
     //измерения ОИ
@@ -63,8 +59,41 @@ public class Objective {
     private int measurements50Hg;           //ЭМП 50гц
     private int measurementsPMP;            //ПМП
 
+    //ОИ логические
+    private boolean oi;
+    private boolean projectRTO;        //экспертиза проекта по РТО
+    private boolean commissioningRTO;  //экспертиза ввод в эксплуатацию по РТО
+    private boolean iff;               //экспертиза на условия работ с ИФФ
+    private boolean researchResults;   //экспертиза по результатам проведенных исследований
+
+    //ИЛЦ логические
+    private boolean ilc;
+    private boolean noise;          //шум
+    private boolean vibration;      //вибрация
+    private boolean microclimate;   //микроклимат
+    private boolean illumination;   //освещенность
+    private boolean laserRadiation; //лазерное излучение
+    private boolean aeroions;       //аэроионы
+    private boolean ultrasound;     //ультразвук
+    private boolean infrasound;     //инфразвук
+    private boolean vch;            //ЭМП ВЧ
+    private boolean vdt;            //ЭМП ВДТ
+    private boolean svch;           //ЭМП СВЧ
+    private boolean m50Hg;           //ЭМП 50гц
+    private boolean pmp;            //ПМП
+
 
     @ManyToOne
     @JoinColumn(name = "request_id", nullable = false)
     private Request request;
+
+    @OneToMany(mappedBy = "objective", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<OI> measuresOI;
+
+    @OneToMany(mappedBy = "objective", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ILC> measuresILC;
+
+    public void setAddressWork() {
+        this.addressWork = this.districtWork + " район, " + this.cityWork + ", " + this.streetWork + ", " + this.houseWork;
+    }
 }

@@ -1,94 +1,115 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#import "macros/login.ftl" as l>
+<#import "macros/common.ftl" as c>
+<#include "utils/security.ftl">
 
 
-<@c.page>
-    <div>
-        <@l.loguot/>
-        <span><a href="/user"> Список пользователей </a></span>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<@c.title>
+    Заявки
+</@c.title>
+
+<@c.style>
+    <#include "css/table.css">
+</@c.style>
+
+<@c.body>
+    <div class="mt-2 ml-1">
+        <input type="text" id="input" onkeyup="tableFilter()" placeholder="Поиск">
     </div>
-    <a href="/addRequest">Перейти на страницу ДОБАВИТЬ</a>
+    <table id="table" class="table table-hover">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 7%">№ заявки</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 6%">Скачать файл заявки</th>
+            <th scope="col" colspan="3" rowspan="1" class="header1" style="width: 24%">Заказчик</th>
+            <th scope="col" colspan="2" rowspan="1" class="header1" style="width: 16%">Услуги</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 8%">Место проведения работ</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 7%">Ответственный</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 7%">Исполнитель</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 6%">Срок выполнения</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 7%">Статус</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 6%">Дата сдачи</th>
+            <th scope="col" colspan="1" rowspan="2" class="header1" style="width: 4%">План/Договор</th>
+        </tr>
+        <tr class="table-primary">
+            <th scope="col" class="header2" style="width: 8%">Тип</th>
+            <th scope="col" class="header2" style="width: 8%">Имя</th>
+            <th scope="col" class="header2" style="width: 8%">Адрес</th>
 
-        Фильтр
-    <div>
-        <form method="get" action="/table">
-            <input type="text" name="filterNumber" value="${filterNumber}">
-            <button type="submit">Найти</button>
-        </form>
-    </div>
+            <th scope="col" class="header2" style="width: 8%">ОИ</th>
+            <th scope="col" class="header2" style="width: 8%">ИЛЦ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#--    onclick="alert('Err!')"     ошибка-->
 
-    <div><h1>Таблица</h1></div>
-        <table border="1">
-    <tr>
-        <td style="width: 5%;" colspan="1" rowspan="2">№ заявки</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Скачать файл заявки</td>
-        <td style="width: 20%;" colspan="3" rowspan="1">Заказчик</td>
-        <td style="width: 20%;" colspan="3" rowspan="1">Владелец</td>
-        <td style="width: 20%;" colspan="2" rowspan="1">Услуги</td>
-        <td style="width: 20%;" colspan="4" rowspan="1">Место проведения работ</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Ответственный</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Исполнитель</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Срок выполнения</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Статус</td>
-        <td style="width: 10%;" colspan="1" rowspan="2">Дата сдачи</td>
-    </tr>
-    <tr>
-        <td style="width: 7%;">Тип</td>
-        <td style="width: 7%;">Имя</td>
-        <td style="width: 7%;">Адрес</td>
-        <td style="width: 7%;">Тип</td>
-        <td style="width: 7%;">Имя</td>
-        <td style="width: 7%;">Адрес</td>
+        <#list list as objective>
+            <tr>
+                <td>
+                    <div class="font-weight-bold">
+                        ${objective.request.number!}
+                    </div>
 
-        <td style="width: 7%;">ОИ</td>
-        <td style="width: 7%;">ИЛЦ</td>
+                    <#if isAdmin>
+                        <div>
+                            <a href="objective_edit/${objective.id}">
+                                <button type="button" class="btn btn-outline-primary btn-sm">Изменить</button>
+                            </a>
+                        </div>
+                    </#if>
+                </td>
+                <td>
+                    <#if objective.request.filename??>
+                        <a href="/download_request_file/${objective.request.filename}">
+                            <button type="button" class="btn btn-outline-primary btn-sm"> Скачать</button>
+                        </a>
+                    </#if>
+                </td>
+                <td>${objective.request.typeCustomer!}</td>
+                <td>${objective.request.nameCustomer!} </td>
+                <td>${objective.request.addressCustomer!}</td>
 
-        <td style="width: 7%;">Район</td>
-        <td style="width: 7%;">Город</td>
-        <td style="width: 7%;">Улица</td>
-        <td style="width: 7%;">Дом</td>
-    </tr>
+                <td>
+                    <#list objective.measuresOI as oi>
+                        <div>${oi.text}</div>
+                    <#else>
+                        НЕТ
+                    </#list>
+                </td>
+                <td>
+                    <#list objective.measuresILC as ilc>
+                        <div>${ilc.text}</div>
+                    <#else>
+                        НЕТ
+                    </#list>
+                </td>
 
-<#list list as initialData>
-    <tr>
-            <td>${initialData.request.number!}</td>
-            <td>
-                <#if initialData.request.filenameDoc??>
-                    <a href="/f/${initialData.request.filename}">Скачать файл</a>
-                </#if>
-            </td>
-            <td>${initialData.request.typeCustomer!}</td>
-            <td>${initialData.request.nameCustomer!} </td>
-            <td>${initialData.request.addressCustomer!}</td>
-            <td>${initialData.request.typeOwner!}</td>
-            <td>${initialData.request.nameOwner!}</td>
-            <td>${initialData.request.addressOwner!}</td>
+                <td>${objective.addressWork!}</td>
+                <td>${objective.responsible!}</td>
+                <td>${objective.executor!}</td>
+                <td>${objective.deadline!}</td>
+                <td><#if objective.status>
+                        <a href="measure/${objective.id}">
+                            <button type="button" class="btn btn-outline-primary btn-sm">Измерения</button>
+                        </a>
+                    <#else>
+                        <a href="execute_objective/${objective.id}">
+                            <button type="button" class="btn btn-outline-danger btn-sm">Выполнить</button>
+                        </a>
+                    </#if></td>
+                <td>${objective.dateCompleted!}</td>
+                <td>${objective.typeOfPayment!}</td>
+            </tr>
 
-            <#list initialData.objectives as objective>
-                <td>${objective.oiService}</td>
-                <td>${objective.ilcService}</td>
-
-                <td>${objective.districtWork}</td>
-                <td>${objective.cityWork}</td>
-                <td>${objective.streetWork}</td>
-                <td>${objective.houseWork}</td>
-
-                <td>${objective.responsible}</td>
-                <td>${objective.executor}</td>
-                <td>${objective.deadline}</td>
-                <td>${objective.status}</td>
-                <td>${objective.dateCompleted}</td>
-            </#list>
-            <#--<td>${request.districtWork!}</td>
-            <td>${request.cityWork!}</td>
-            <td>${request.streetWork!}</td>
-            <td>${request.houseWork!}</td>
-            <td>${request.responsible!}</td>-->
         <#else>
-        <b> Нет заявок </b>
-    </#list>
-    <#--</table>
-    <form method="get" action="/table">
-        <button type="submit">Найти</button>
-    </form>-->
-</@c.page>
+            <b> Нет заявок </b>
+        </#list>
+        </tbody>
+    </table>
+
+    <script>
+        <#include "js/filter.js">
+    </script>
+
+</@c.body>

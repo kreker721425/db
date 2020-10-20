@@ -12,6 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
     private String username;
     private String password;
     private boolean active;
@@ -20,5 +21,9 @@ public class User {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
 
 }
