@@ -27,7 +27,7 @@
         <tr class="table-primary">
             <th scope="col">Имя</th>
             <th scope="col">Логин</th>
-            <th scope="col">Пароль</th>
+            <th scope="col">Роль</th>
             <th scope="col" colspan="2">Команды</th>
         </tr>
         </thead>
